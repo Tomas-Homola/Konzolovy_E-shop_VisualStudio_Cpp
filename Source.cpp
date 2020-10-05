@@ -40,7 +40,7 @@ PRODUKT* produkty_nacitaj_zo_suboru(string filename)
 
 	subor >> pocet_produktov;
 
-	cout << "pocet produktov je " << pocet_produktov << endl;
+	//cout << "pocet produktov je " << pocet_produktov << endl;
 
 	produkty = new PRODUKT[pocet_produktov];
 
@@ -54,7 +54,7 @@ PRODUKT* produkty_nacitaj_zo_suboru(string filename)
 	}
 
 	subor.close();
-	cout << "produkty nacitane" << endl;
+	//cout << "produkty nacitane" << endl;
 	return produkty;
 }
 
@@ -128,17 +128,137 @@ void produkt_vyber_podla_ID(int vybrane_ID)
 
 void produkty_vypis_podla_nazvu(string hladany_vyraz)
 {
+	int najdene_produkty = 0, vybrane_ID;
 
+	cout << "Vysledky pre hladany vyraz '" << hladany_vyraz << "':" << endl;
+
+	for (int i = 0; i < pocet_produktov; i++)
+	{
+		size_t najdene = produkty[i].nazov.find(hladany_vyraz);
+		if (najdene != string::npos)
+		{
+			cout << "Vyrobca: " << produkty[i].vyrobca << ", Nazov produktu: " << produkty[i].nazov << ", ID: " << produkty[i].ID << endl;
+			najdene_produkty++;
+		}
+
+		if (najdene_produkty > 0)
+		{
+			cout << endl << "Vyberte si produkt podla prislusneho ID" << endl;
+			cin >> vybrane_ID;
+
+			if (vybrane_ID > 0 && vybrane_ID <= pocet_produktov)
+				produkt_vyber_podla_ID(vybrane_ID);
+			else
+			{
+				cout << "Zle zadane ID produktu" << endl;
+				main_page();
+			}
+		}
+		else
+		{
+			cout << "Pod hladanym nazvom '" << hladany_vyraz << "' sa nic nenaslo" << endl;
+			main_page();
+		}
+	}
 }
 
 void produkty_vypis_podla_vyrobcu(string hladany_vyraz)
 {
+	int najdene_produkty = 0, vybrane_ID;
 
+	cout << "Vysledky pre hladany vyraz '" << hladany_vyraz << "':" << endl;
+
+	for (int i = 0; i < pocet_produktov; i++)
+	{
+		size_t najdene = produkty[i].vyrobca.find(hladany_vyraz);
+		if (najdene != string::npos)
+		{
+			cout << "Vyrobca: " << produkty[i].vyrobca << ", Nazov produktu: " << produkty[i].nazov << ", ID: " << produkty[i].ID << endl;
+			najdene_produkty++;
+		}
+
+		if (najdene_produkty > 0)
+		{
+			cout << endl << "Vyberte si produkt podla prislusneho ID" << endl;
+			cin >> vybrane_ID;
+
+			if (vybrane_ID > 0 && vybrane_ID <= pocet_produktov)
+				produkt_vyber_podla_ID(vybrane_ID);
+			else
+			{
+				cout << "Zle zadane ID produktu" << endl;
+				main_page();
+			}
+		}
+		else
+		{
+			cout << "Pod hladanym nazvom '" << hladany_vyraz << "' sa nic nenaslo" << endl;
+			main_page();
+		}
+	}
 }
 
 void main_page()
 {
+	fstream blocik;
+	int volba = 0;
+	string hladany_vyraz;
 
+	do
+	{
+		cout << "Vyberte moznost\n1 -> pre hladanie podla nazvu produktu\n2 -> pre hladanie podla nazvu vyrobcu produktu\n3 -> pre ukoncenie nakupu" << endl;
+		cin >> volba;
+		if (volba > 3 || volba < 1)
+			cout << "Zle zadana moznost" << endl;
+
+	} while (volba > 3 || volba < 1);
+
+	if (volba == 1)
+	{
+		cout << "Hladat podla:" << endl;
+		cin >> hladany_vyraz;
+
+		produkty_vypis_podla_nazvu(hladany_vyraz);
+	}
+	else if (volba == 2)
+	{
+		cout << "Hladat podla:" << endl;
+		cin >> hladany_vyraz;
+
+		produkty_vypis_podla_vyrobcu(hladany_vyraz);
+	}
+	else if (volba == 3)
+	{
+		cout << "Koniec nakupu" << endl;
+
+		cout << "Minute peniaze: " << setprecision(3) << minute_peniaze << " EUR" << endl;
+
+		blocik.open("blocik_od_nakupu.txt", ios::out | ios::app);
+		if (!blocik.is_open())
+		{
+			cout << "Nepodarilo sa otvorit blocik" << endl;
+			exit(1);
+		}
+
+		blocik << "E-shop Obchodik\nUlica, Mesto, Krajina\nDatum a cas nakupu: 30/09/20 11:58\n";
+		blocik << "******************************\n";
+		blocik << "Zakaznik si zakupil nasledujuce polozky:\n";
+
+		for (int i = 0; i < pocet_kupenych_produktov; i++)
+		{
+			blocik << "1x " << zakaznik->kupene_produkty[i].nazov << " ... " << setprecision(3) << zakaznik->kupene_produkty[i].cena << endl;
+		}
+
+		blocik << "______________________________\n";
+		blocik << "Suma celkovo: " << setprecision(3) << minute_peniaze << " EUR\n\nDakujeme za vas nakup";
+
+		blocik.close();
+
+		delete zakaznik;
+		delete[] produkty;
+
+		exit(0);
+	}
 
 }
 
@@ -153,6 +273,8 @@ int main()
 	{
 		cout << "ID: " << produkty[i].ID << "; nazov: " << produkty[i].nazov << "; vyrobca: " << produkty[i].vyrobca << "; pocet kusov: " << produkty[i].pocet_kusov << "; cena: " << produkty[i].cena << endl;
 	}*/
+
+	main_page();
 
 	return 0;
 }
