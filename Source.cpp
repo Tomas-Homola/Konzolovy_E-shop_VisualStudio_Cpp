@@ -233,7 +233,7 @@ void main_page()
 
 		cout << "Minute peniaze: " << setprecision(3) << minute_peniaze << " EUR" << endl;
 
-		blocik.open("blocik_od_nakupu.txt", ios::out | ios::app);
+		blocik.open("blocik_od_nakupu.txt", ios::out);
 		if (!blocik.is_open())
 		{
 			cout << "Nepodarilo sa otvorit blocik" << endl;
