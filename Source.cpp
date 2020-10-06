@@ -78,13 +78,35 @@ ZAKAZNIK* registruj_zakaznika()
 
 void main_page();
 
+string str_to_upr(string string) // male pismenka na velke
+{
+	for (int i = 0; i < string.length(); i++)
+	{
+		if (string[i] >= 97 && string[i] <= 122)
+			string[i] = string[i] - 32;
+	}
+
+	return string;
+}
+
+string str_to_lwr(string string)
+{
+	for (int i = 0; i < string.length(); i++) // velke pismenka na male
+	{
+		if (string[i] >= 65 && string[i] <= 90)
+			string[i] = string[i] + 32;
+	}
+
+	return string;
+}
+
 void produkt_vyber_podla_ID(int vybrane_ID)
 {
 	int kupit = 0;
 
 	if (produkty[vybrane_ID - 1].pocet_kusov < 1) // produkt NIE JE na sklade
 	{
-		cout << "Vybrany produkt " << produkty[vybrane_ID - 1].nazov << " NIE JE momentalne na sklade" << endl;
+		cout << "\nVybrany produkt " << produkty[vybrane_ID - 1].nazov << " NIE JE momentalne na sklade" << endl;
 		main_page();
 	}
 	else // produkt JE na sklade
@@ -132,6 +154,8 @@ void produkty_vypis_podla_nazvu(string hladany_vyraz)
 
 	cout << "Vysledky pre hladany vyraz '" << hladany_vyraz << "':" << endl;
 
+	hladany_vyraz = str_to_lwr(hladany_vyraz);
+
 	for (int i = 0; i < pocet_produktov; i++)
 	{
 		if (produkty[i].nazov.find(hladany_vyraz, 0) != -1)
@@ -167,6 +191,8 @@ void produkty_vypis_podla_vyrobcu(string hladany_vyraz)
 	int najdene_produkty = 0, vybrane_ID;
 
 	cout << "Vysledky pre hladany vyraz '" << hladany_vyraz << "':" << endl;
+
+	hladany_vyraz = str_to_upr(hladany_vyraz);
 
 	for (int i = 0; i < pocet_produktov; i++)
 	{
@@ -229,7 +255,7 @@ void main_page()
 	}
 	else if (volba == 3)
 	{
-		cout << "Koniec nakupu" << endl;
+		cout << "\nKoniec nakupu" << endl;
 
 		cout << "Minute peniaze: " << setprecision(3) << minute_peniaze << " EUR" << endl;
 
@@ -264,17 +290,7 @@ void main_page()
 
 int main()
 {
-
-	//string haystack = "There is a needle here";
-	
-	
 	produkty = produkty_nacitaj_zo_suboru("produkty.txt");
-	
-	/*if (produkty[1].nazov.find("od", 0) == -1)
-		cout << "index: " << produkty[1].nazov.find("od", 0) << endl;
-	else
-		cout << "naslo sa" << endl;
-	*/
 	
 	zakaznik = registruj_zakaznika();
 
