@@ -134,32 +134,32 @@ void produkty_vypis_podla_nazvu(string hladany_vyraz)
 
 	for (int i = 0; i < pocet_produktov; i++)
 	{
-		size_t najdene = produkty[i].nazov.find(hladany_vyraz);
-		if (najdene != string::npos)
+		if (produkty[i].nazov.find(hladany_vyraz, 0) != -1)
 		{
 			cout << "Vyrobca: " << produkty[i].vyrobca << ", Nazov produktu: " << produkty[i].nazov << ", ID: " << produkty[i].ID << endl;
 			najdene_produkty++;
 		}
+	}
+	
+	if (najdene_produkty > 0)
+	{
+		cout << endl << "Vyberte si produkt podla prislusneho ID" << endl;
+		cin >> vybrane_ID;
 
-		if (najdene_produkty > 0)
-		{
-			cout << endl << "Vyberte si produkt podla prislusneho ID" << endl;
-			cin >> vybrane_ID;
-
-			if (vybrane_ID > 0 && vybrane_ID <= pocet_produktov)
-				produkt_vyber_podla_ID(vybrane_ID);
-			else
-			{
-				cout << "Zle zadane ID produktu" << endl;
-				main_page();
-			}
-		}
+		if (vybrane_ID > 0 && vybrane_ID <= pocet_produktov)
+			produkt_vyber_podla_ID(vybrane_ID);
 		else
 		{
-			cout << "Pod hladanym nazvom '" << hladany_vyraz << "' sa nic nenaslo" << endl;
+			cout << "Zle zadane ID produktu" << endl;
 			main_page();
 		}
 	}
+	else
+	{
+		cout << "Pod hladanym nazvom '" << hladany_vyraz << "' sa nic nenaslo" << endl;
+		main_page();
+	}
+
 }
 
 void produkty_vypis_podla_vyrobcu(string hladany_vyraz)
@@ -170,32 +170,32 @@ void produkty_vypis_podla_vyrobcu(string hladany_vyraz)
 
 	for (int i = 0; i < pocet_produktov; i++)
 	{
-		size_t najdene = produkty[i].vyrobca.find(hladany_vyraz);
-		if (najdene != string::npos)
+		if (produkty[i].vyrobca.find(hladany_vyraz) != -1)
 		{
 			cout << "Vyrobca: " << produkty[i].vyrobca << ", Nazov produktu: " << produkty[i].nazov << ", ID: " << produkty[i].ID << endl;
 			najdene_produkty++;
 		}
+	}
+		
+	if (najdene_produkty > 0)
+	{
+		cout << endl << "Vyberte si produkt podla prislusneho ID" << endl;
+		cin >> vybrane_ID;
 
-		if (najdene_produkty > 0)
-		{
-			cout << endl << "Vyberte si produkt podla prislusneho ID" << endl;
-			cin >> vybrane_ID;
-
-			if (vybrane_ID > 0 && vybrane_ID <= pocet_produktov)
-				produkt_vyber_podla_ID(vybrane_ID);
-			else
-			{
-				cout << "Zle zadane ID produktu" << endl;
-				main_page();
-			}
-		}
+		if (vybrane_ID > 0 && vybrane_ID <= pocet_produktov)
+			produkt_vyber_podla_ID(vybrane_ID);
 		else
 		{
-			cout << "Pod hladanym nazvom '" << hladany_vyraz << "' sa nic nenaslo" << endl;
+			cout << "Zle zadane ID produktu" << endl;
 			main_page();
 		}
 	}
+	else
+	{
+		cout << "Pod hladanym nazvom '" << hladany_vyraz << "' sa nic nenaslo" << endl;
+		main_page();
+	}
+	
 }
 
 void main_page()
@@ -265,8 +265,17 @@ void main_page()
 int main()
 {
 
+	//string haystack = "There is a needle here";
+	
+	
 	produkty = produkty_nacitaj_zo_suboru("produkty.txt");
-
+	
+	/*if (produkty[1].nazov.find("od", 0) == -1)
+		cout << "index: " << produkty[1].nazov.find("od", 0) << endl;
+	else
+		cout << "naslo sa" << endl;
+	*/
+	
 	zakaznik = registruj_zakaznika();
 
 	/*for (int i = 0; i < pocet_produktov; i++)
