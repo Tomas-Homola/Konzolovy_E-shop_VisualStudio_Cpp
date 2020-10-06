@@ -227,11 +227,12 @@ void produkty_vypis_podla_vyrobcu(string hladany_vyraz)
 void main_page()
 {
 	fstream blocik;
-	int volba = 0;
+	int volba;
 	string hladany_vyraz;
 
 	do
 	{
+		volba = 0;
 		cout << "Vyberte moznost\n1 -> pre hladanie podla nazvu produktu\n2 -> pre hladanie podla nazvu vyrobcu produktu\n3 -> pre ukoncenie nakupu" << endl;
 		cin >> volba;
 		if (volba > 3 || volba < 1)
@@ -272,7 +273,7 @@ void main_page()
 
 		for (int i = 0; i < pocet_kupenych_produktov; i++)
 		{
-			blocik << "1x " << zakaznik->kupene_produkty[i].nazov << " ... " << setprecision(3) << zakaznik->kupene_produkty[i].cena << endl;
+			blocik << "1x " << zakaznik->kupene_produkty[i].nazov << " ... " << setprecision(3) << zakaznik->kupene_produkty[i].cena << " EUR" << endl;
 		}
 
 		blocik << "______________________________\n";
@@ -290,14 +291,19 @@ void main_page()
 
 int main()
 {
+	/*int x = 1;
+	char c = 'a';
+	char b = '1';
+
+	if (isdigit(b))
+		cout << "Je to cislo\n";
+	else
+		cout << "Nie je to cislo\n";
+	*/
+	
 	produkty = produkty_nacitaj_zo_suboru("produkty.txt");
 	
 	zakaznik = registruj_zakaznika();
-
-	/*for (int i = 0; i < pocet_produktov; i++)
-	{
-		cout << "ID: " << produkty[i].ID << "; nazov: " << produkty[i].nazov << "; vyrobca: " << produkty[i].vyrobca << "; pocet kusov: " << produkty[i].pocet_kusov << "; cena: " << produkty[i].cena << endl;
-	}*/
 
 	main_page();
 
