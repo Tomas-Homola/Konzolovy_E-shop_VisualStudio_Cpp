@@ -69,9 +69,20 @@ ZAKAZNIK* registruj_zakaznika()
 	cout << "Zadajte priezvisko zakaznika:" << endl;
 	cin >> zakaznik->priezvisko;
 	cout << "Zadajte rozpocet zakaznika:" << endl;
-	cin >> zakaznik->rozpocet;
+	
+	do
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		
+		cin >> zakaznik->rozpocet;
+		if (zakaznik->rozpocet < 0)
+			cout << "Zle zadany rozpocet, zadajte kladne cislo" << endl;
 
-	cout << "Zakaznik:" << endl << "-meno: " << zakaznik->meno << endl << "-priezvisko: " << zakaznik->priezvisko << endl << "-rozpocet: " << std::setprecision(3) << zakaznik->rozpocet << " EUR" << endl;
+	} while (zakaznik->rozpocet <= 0);
+	
+
+	cout << "Zakaznik:" << endl << "-meno: " << zakaznik->meno << endl << "-priezvisko: " << zakaznik->priezvisko << endl << "-rozpocet: " << std::setprecision(4) << zakaznik->rozpocet << " EUR\n" << endl;
 
 	return zakaznik;
 }
@@ -160,7 +171,7 @@ void produkty_vypis_podla_nazvu(string hladany_vyraz)
 	{
 		if (produkty[i].nazov.find(hladany_vyraz, 0) != -1)
 		{
-			cout << "Vyrobca: " << produkty[i].vyrobca << ", Nazov produktu: " << produkty[i].nazov << ", ID: " << produkty[i].ID << endl;
+			cout << "ID: " << produkty[i].ID << ", Nazov produktu: " << produkty[i].nazov << ", Vyrobca: " << produkty[i].vyrobca << endl;
 			najdene_produkty++;
 		}
 	}
@@ -198,7 +209,7 @@ void produkty_vypis_podla_vyrobcu(string hladany_vyraz)
 	{
 		if (produkty[i].vyrobca.find(hladany_vyraz) != -1)
 		{
-			cout << "Vyrobca: " << produkty[i].vyrobca << ", Nazov produktu: " << produkty[i].nazov << ", ID: " << produkty[i].ID << endl;
+			cout << "ID: " << produkty[i].ID << ", Vyrobca: " << produkty[i].vyrobca << ", Nazov produktu: " << produkty[i].nazov <<  endl;
 			najdene_produkty++;
 		}
 	}
@@ -227,13 +238,16 @@ void produkty_vypis_podla_vyrobcu(string hladany_vyraz)
 void main_page()
 {
 	fstream blocik;
-	int volba;
-	string hladany_vyraz;
+	int volba = 0;
+	string hladany_vyraz = "";
 
 	do
 	{
-		volba = 0;
 		cout << "Vyberte moznost\n1 -> pre hladanie podla nazvu produktu\n2 -> pre hladanie podla nazvu vyrobcu produktu\n3 -> pre ukoncenie nakupu" << endl;
+		
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
 		cin >> volba;
 		if (volba > 3 || volba < 1)
 			cout << "Zle zadana moznost" << endl;
@@ -291,15 +305,6 @@ void main_page()
 
 int main()
 {
-	/*int x = 1;
-	char c = 'a';
-	char b = '1';
-
-	if (isdigit(b))
-		cout << "Je to cislo\n";
-	else
-		cout << "Nie je to cislo\n";
-	*/
 	
 	produkty = produkty_nacitaj_zo_suboru("produkty.txt");
 	
